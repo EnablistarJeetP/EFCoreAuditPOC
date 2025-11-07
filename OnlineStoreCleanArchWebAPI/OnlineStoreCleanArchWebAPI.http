@@ -1,0 +1,6 @@
+@OnlineStoreCleanArchWebAPI_HostAddress = http://localhost:5199
+
+GET {{OnlineStoreCleanArchWebAPI_HostAddress}}/weatherforecast/
+Accept: application/json
+
+###
