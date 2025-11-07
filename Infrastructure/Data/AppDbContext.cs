@@ -19,6 +19,7 @@ namespace Infrastructure.Data
         }
 
         public DbSet<ProductEntity> Products { get; set; }
+        public DbSet<CustomerEntity> Customers { get; set; }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {

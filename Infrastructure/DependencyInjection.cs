@@ -110,6 +110,7 @@ namespace Infrastructure
             //    }));
 
             services.AddScoped<IProductRepository, ProductRepository>();
+            services.AddScoped<ICustomerRepository, CustomerRepository>();
 
             return services;
         }
