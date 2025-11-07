@@ -20,7 +20,7 @@ namespace Infrastructure.Migrations.AuditDb
                         .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn),
                     TableName = table.Column<string>(type: "text", nullable: false),
                     Action = table.Column<string>(type: "text", nullable: false),
-                    PrimaryKey = table.Column<string>(type: "text", nullable: false),
+                    PrimaryKey = table.Column<int>(type: "integer", nullable: false),
                     Value = table.Column<string>(type: "text", nullable: true),
                     AuditDate = table.Column<DateTime>(type: "timestamp with time zone", nullable: false),
                     UserName = table.Column<string>(type: "text", nullable: false)

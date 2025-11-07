@@ -6,6 +6,8 @@ using Domain.Entities;
 using Domain.Interfaces;
 using Infrastructure.Data;
 using Infrastructure.Data.Entities;
+using Infrastructure.Data.Entities.Audit;
+using Infrastructure.Data.Helpers;
 using Infrastructure.Repositories;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
@@ -29,6 +31,24 @@ namespace Infrastructure
             //{
             //    options.UseNpgsql("Host=localhost;Port=5432;Database=OnlineStoreDB;Username=postgres;Password=Jeet@123");
             //});
+
+            Audit.Core.Configuration.DataProvider = new EntityFrameworkDataProvider()
+            {
+                DbContextBuilder = ev => new Data.AuditDbContext(),
+                AuditTypeMapper = (t, ee) => typeof(AuditLog),
+                AuditEntityAction = (evt, entry, auditEntity) =>
+                {
+                    var a = (dynamic)auditEntity;
+                    a.AuditDate = DateTime.UtcNow;
+                    a.UserName = evt.Environment.UserName;
+                    a.TableName = entry.Table;
+                    //a.PrimaryKey = String.Join(",", entry.PrimaryKey.FirstOrDefault());
+                    a.PrimaryKey = (int)entry.PrimaryKey.FirstOrDefault().Value;
+                    a.Action = entry.Action; // Insert, Update, Delete
+                    a.Value = System.Text.Json.JsonSerializer.Serialize(AuditHelper.CreateAuditChangeObject(entry));
+                    return Task.FromResult(true); // return false to ignore the audit
+                }
+            };
 
             //Audit.Core.Configuration.Setup()
             //.UseEntityFramework(ef => ef
@@ -75,24 +95,19 @@ namespace Infrastructure
             //    }
             //};
 
-            Audit.Core.Configuration.Setup()
-            .UseEntityFramework(x => x
-                .UseDbContext<Infrastructure.Data.AuditDbContext>()
-                .AuditTypeMapper((entityType) => AuditTypeMap[entityType])
-                //.AuditTypeNameMapper(typeName =>
-                //{
-                //    Console.WriteLine(typeName);
-                //    return "Audit_" + typeName;
-                //})
-                .AuditEntityAction((evt, entry, auditEntity) =>
-                {
-                    // auditEntity is object
-                    ((dynamic)auditEntity).AuditDate = DateTime.UtcNow;
-                    var a = (dynamic)auditEntity;
-                    a.AuditDate = DateTime.UtcNow;
-                    a.UserName = evt.Environment.UserName;
-                    a.Action = entry.Action; // Insert, Update, Delete
-                }));
+            //Audit.Core.Configuration.Setup()
+            //.UseEntityFramework(x => x
+            //    .UseDbContext<Infrastructure.Data.AuditDbContext>()
+            //    .AuditTypeMapper((entityType) => AuditTypeMap[entityType])
+            //    .AuditEntityAction((evt, entry, auditEntity) =>
+            //    {
+            //        // auditEntity is object
+            //        ((dynamic)auditEntity).AuditDate = DateTime.UtcNow;
+            //        var a = (dynamic)auditEntity;
+            //        a.AuditDate = DateTime.UtcNow;
+            //        a.UserName = evt.Environment.UserName;
+            //        a.Action = entry.Action; // Insert, Update, Delete
+            //    }));
 
             services.AddScoped<IProductRepository, ProductRepository>();
 

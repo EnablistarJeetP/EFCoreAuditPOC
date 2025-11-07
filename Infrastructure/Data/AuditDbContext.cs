@@ -1,5 +1,4 @@
-﻿using Domain.Entities;
-using Infrastructure.Data.Entities;
+﻿using Infrastructure.Data.Entities.Audit;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 
@@ -36,6 +35,7 @@ namespace Infrastructure.Data
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             modelBuilder.Entity<AuditProductEntity>().HasKey(table => table.AuditId);
+            modelBuilder.Entity<AuditLog>().HasKey(table => table.AuditId);
         }
     }
 }

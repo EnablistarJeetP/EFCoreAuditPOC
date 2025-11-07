@@ -1,6 +1,6 @@
 ﻿using Infrastructure.Data.Interfaces;
 
-namespace Domain.Entities
+namespace Infrastructure.Data.Entities.Audit
 {
     public class AuditProductEntity : IAuditEntity
     {
