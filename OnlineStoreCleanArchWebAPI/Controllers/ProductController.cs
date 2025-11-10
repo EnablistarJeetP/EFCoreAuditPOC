@@ -19,6 +19,12 @@ namespace OnlineStoreCleanArchWebAPI.Controllers
             return Ok();
         }
 
+        [HttpPost("/bulkInsert/{StartOffSet}/{NumOfProducts}")]
+        public async Task BulkInsertProducts([FromRoute] int StartOffSet, [FromRoute] int NumOfProducts)
+        {
+            await sender.Send(new BulkInsertProductCommand(StartOffSet, NumOfProducts));
+        }
+
         [HttpDelete("delete/{Id}")]
         public async Task<IActionResult> DeleteProduct([FromRoute] int Id)
         {

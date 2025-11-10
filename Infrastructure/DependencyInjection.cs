@@ -50,6 +50,8 @@ namespace Infrastructure
                 }
             };
 
+            Audit.Core.Configuration.AuditDisabled = false;
+
             //Audit.Core.Configuration.Setup()
             //.UseEntityFramework(ef => ef
             //    .UseDbContext<Infrastructure.Data.AuditDbContext>()

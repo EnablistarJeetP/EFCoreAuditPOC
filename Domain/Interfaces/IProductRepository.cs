@@ -12,6 +12,8 @@ namespace Domain.Interfaces
     {
         public Task<IEnumerable<ProductEntity>> GetProducts();
 
+        public Task BulkInsertProducts(int startOffSet, int numOfProducts);
+
         public Task<ProductEntity> GetProductById(int id);
 
         public Task<ProductEntity> AddProduct(ProductEntity product);

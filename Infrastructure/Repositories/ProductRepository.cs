@@ -10,6 +10,7 @@ using Domain.Interfaces;
 using Domain.Entities;
 using Microsoft.EntityFrameworkCore;
 using System.Net;
+using System.Diagnostics;
 
 namespace Infrastructure.Repositories
 {
@@ -40,6 +41,48 @@ namespace Infrastructure.Repositories
             await context.SaveChangesAsync();
 
             return product;
+        }
+
+        public async Task BulkInsertProducts(int startOffSet, int numOfProducts)
+        {
+            List<ProductEntity> productSet = new ();
+            List<CustomerEntity> customerSet = new();
+            Stopwatch stopwatch = new ();
+
+            bool genderFlag = true;
+            for(int i = startOffSet; i < startOffSet + numOfProducts; i++)
+            {
+                string iteration = i.ToString();
+                productSet.Add(new ProductEntity()
+                {
+                    Name = "Product " + iteration,
+                    Price = 100.00 + i,
+                    Quantity = i,
+                    Description = "Product description for product " + iteration
+                });
+
+
+                customerSet.Add(new CustomerEntity()
+                {
+                    FirstName = "FName " + iteration,
+                    LastName = "LName" + iteration,
+                    EmailId = $"fname{iteration}.lName{iteration}@enablistar.com",
+                    Gender = genderFlag ? "Male" : "Female"
+                });
+
+                genderFlag = !genderFlag;
+            }
+
+            stopwatch.Start();
+
+            context.Products.AddRange(productSet);
+            context.Customers.AddRange(customerSet);
+
+            await context.SaveChangesAsync();
+
+            stopwatch.Stop();
+
+            Console.WriteLine($"Time taken to insert {numOfProducts} is {stopwatch.ElapsedMilliseconds} ms");
         }
 
         public async Task<bool> DeleteProduct(int id)

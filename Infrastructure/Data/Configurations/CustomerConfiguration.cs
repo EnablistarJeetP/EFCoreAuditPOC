@@ -24,7 +24,7 @@ namespace Infrastructure.Data.Configurations
                    .HasMaxLength(256);
             builder.Property(p => p.Gender)
                    .IsRequired()
-                   .HasMaxLength(5);
+                   .HasMaxLength(6);
             builder.Property(p => p.EmailId)
                    .IsRequired()
                    .HasMaxLength(256);

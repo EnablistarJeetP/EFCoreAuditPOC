@@ -18,6 +18,7 @@ namespace Infrastructure.Data
 
         public DbSet<AuditLog> AuditLogs { get; set; }
         public DbSet<AuditProductEntity> AuditProducts { get; set; }
+        public DbSet<AuditCustomerEntity> AuditCustomers { get; set; }
 
         public static void Configure(IConfiguration configuration)
         {
@@ -36,6 +37,7 @@ namespace Infrastructure.Data
         {
             modelBuilder.Entity<AuditProductEntity>().HasKey(table => table.AuditId);
             modelBuilder.Entity<AuditLog>().HasKey(table => table.AuditId);
+            modelBuilder.Entity<AuditCustomerEntity>().HasKey(table => table.AuditId);
         }
     }
 }
